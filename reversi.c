@@ -5,19 +5,21 @@ typedef enum {WHT=-1, EMP=0, BLK=+1, OUT=+2} Piece;
 
 Piece cell[SIZE][SIZE];
 
+//----”Õ–Ê‚Ì‰Šú‰»
 void init(void)
 {
     int i, j;
     
     for(i = 0; i < SIZE; i++) {
         for(j = 0; j < SIZE; j++) {
-            cell[i][j] = EMP; 
+            cell[i][j] = BLK; 
         }
     }
-    cell[4][4] = cell[3][3] = WHT;
+    cell[4][4] = cell[3][3] = EMP;
     cell[3][4] = cell[4][3] = BLK;
 }
     
+//----”Õ–Ê‚Ìo—Í
 void output(void) 
 {
     int i, j;
@@ -37,6 +39,7 @@ void output(void)
     }
 }
 
+//----“ü—Íˆ—
 void input(int player)
 {
     int x, y; //x‚ª‰¡ y‚ªc cell[y][x]‚Æ‚â‚é
@@ -55,13 +58,14 @@ void input(int player)
     
 }
 
-int last(void)
+//----I—¹”»’è
+int endCheck(void)
 {
-    int i, j, x, y;
+    int i, j;
     
     for(i = 0; i < SIZE; i++) {
         for(j = 0; j < SIZE; j++) {
-            if ( cell[y][x] == EMP) {
+            if ( cell[j][i] == EMP) {
                 return 1;
             }
         }
@@ -69,16 +73,48 @@ int last(void)
     return 0;
 }
 
+//----Ÿ—˜”»’è
+void winCheck(void)
+{
+    int i, j;
+    int b = 0, w = 0;
+    
+    for(i = 0; i < SIZE; i++) {
+        for(j = 0; j < SIZE; j++) {
+            if ( cell[j][i] == BLK ) {
+                b++;
+            }
+            if ( cell[j][i] == WHT ) {
+                w++;
+            }
+        }
+    }
+    
+    if ( b > w ) {
+        printf("•‚ÌŸ‚¿");
+    } else if ( w > b ) {
+        printf("”’‚ÌŸ‚¿");
+    } else {
+        printf("ˆø‚«•ª‚¯");
+    }
+}
+
+//----ƒƒCƒ“ŠÖ”
 int main(void)
 {
     int player = BLK;
     
     init();
-    while (last) {
+    while (1) {
         output();
         input(player);
+        if ( endCheck() == 0 ) {
+            output();
+            break;
+        }
         player *= -1;
     }
     
+    winCheck();
     return 0;
 }
